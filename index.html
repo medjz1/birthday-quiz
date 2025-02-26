@@ -5,58 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Birthday Quiz</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2"></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background-color: #ffebf0;
-      }
-      .container {
-        max-width: 600px;
-        margin: 50px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      .question {
-        font-size: 18px;
-        margin-bottom: 10px;
-      }
-      .options {
-        list-style: none;
-        padding: 0;
-      }
-      .options li {
-        margin: 10px 0;
-      }
-      button {
-        padding: 10px 15px;
-        font-size: 16px;
-        border: none;
-        background: #da3447;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 5px;
-      }
-      button:hover {
-        background: #ff1414;
-      }
-      #result {
-        margin-top: 20px;
-        font-size: 20px;
-      }
-      #reveal-btn {
-        margin-top: 20px;
-        background: #4caf50;
-        display: none;
-      }
-      #voice-note {
-        display: none;
-        margin-top: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
@@ -72,16 +21,56 @@
 
     <script>
       const questions = [
-        { q: "How often do you have dreams about me?", options: ["Rarely", "Sometimes", "A lot"], answer: 2 },
-        { q: "When did we first text?", options: ["November", "October", "December"], answer: 0 },
-        { q: "What’s my favorite nickname for you?", options: ["Princess", "Tiamisu", "Azzy"], answer: 0 },
-        { q: "What’s my favorite thing about you?", options: ["Your smile", "Your eyes", "Your heart"], answer: 2 },
-        { q: "What's my favourite snack?", options: ["Tiramisu", "Cake", "You"], answer: 2 },
-        { q: "Which pet would we get together?", options: ["Dog", "Cat", "Bunny"], answer: 1 },
-        { q: "What’s my dream date with you after marriage?", options: ["Beach picnic", "Movie night, just us", "Dinner"], answer: 1 },
-        { q: "What’s my favourite Azzy dream?", options: ["Hu Tao one", "Sofa teasing one", "Mirror dream"], answer: 0 },
-        { q: "How much do I love you?", options: ["A little", "A lot", "Infinity"], answer: 2 },
-        { q: "Do you want to spend all your next birthdays with me?", options: ["Yes", "Yes", "Yes"], answer: 0 }
+        {
+          q: "How often do you have dreams about me?",
+          options: ["Rarely", "Sometimes", "A lot"],
+          answer: 2,
+        },
+        {
+          q: "When did we first text?",
+          options: ["November", "October", "December"],
+          answer: 0,
+        },
+        {
+          q: "What’s my favorite nickname for you?",
+          options: ["Princess", "Tiamisu", "Azzy"],
+          answer: 0,
+        },
+        {
+          q: "What’s my favorite thing about you?",
+          options: ["Your smile", "Your eyes", "Your heart"],
+          answer: 2,
+        },
+        {
+          q: "What's my favourite snack?",
+          options: ["Tiramisu", "Cake", "You"],
+          answer: 2,
+        },
+        {
+          q: "Which pet would we get together?",
+          options: ["Dog", "Cat", "Bunny"],
+          answer: 1,
+        },
+        {
+          q: "What’s my dream date with you after marriage?",
+          options: ["Beach picnic", "Movie night, just us", "Dinner"],
+          answer: 1,
+        },
+        {
+          q: "What’s my favourite Azzy dream?",
+          options: ["Hu Tao one", "Sofa teasing one", "Mirror dream"],
+          answer: 0,
+        },
+        {
+          q: "How much do I love you?",
+          options: ["A little", "A lot", "Infinity"],
+          answer: 2,
+        },
+        {
+          q: "Do you want to spend all your next birthdays with me?",
+          options: ["Yes", "Yes", "Yes"],
+          answer: 0,
+        },
       ];
 
       let currentQuestionIndex = 0;
@@ -140,7 +129,9 @@
       }
 
       function saveAnswer() {
-        const selected = document.querySelector(`input[name='q${currentQuestionIndex}']:checked`);
+        const selected = document.querySelector(
+          `input[name='q${currentQuestionIndex}']:checked`
+        );
         if (selected) {
           userAnswers[currentQuestionIndex] = parseInt(selected.value);
         }
@@ -149,21 +140,23 @@
       function submitQuiz() {
         saveAnswer(); // Ensure last answer is saved
         let score = 0;
-        
+
         userAnswers.forEach((ans, index) => {
           if (ans !== null && ans === questions[index].answer) {
             score++;
           }
         });
 
-        document.getElementById("quiz").innerHTML = `<h2>You scored ${score}/10! 🎉</h2>`;
+        document.getElementById(
+          "quiz"
+        ).innerHTML = `<h2>You scored ${score}/10! 🎉</h2>`;
         document.getElementById("reveal-btn").style.display = "block";
 
         // Confetti animation
         confetti({
           particleCount: 150,
           spread: 100,
-          origin: { y: 0.6 }
+          origin: { y: 0.6 },
         });
       }
 
