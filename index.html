@@ -33,21 +33,17 @@
         padding: 10px 15px;
         font-size: 16px;
         border: none;
-        background: #ff69b4;
+        background: #da3447;
         color: white;
         border-radius: 5px;
         cursor: pointer;
       }
       button:hover {
-        background: #ff1493;
+        background: #ff1414;
       }
-      #result {
+      #result, #reveal-btn {
         margin-top: 20px;
-        font-size: 20px;
-      }
-      #reveal-btn {
-        margin-top: 20px;
-        background: #4caf50;
+        display: none;
       }
       #voice-note {
         display: none;
@@ -59,7 +55,8 @@
     <div class="container">
       <h1>Happy Birthday Quiz!</h1>
       <div id="quiz"></div>
-      <button onclick="submitQuiz()">Submit Quiz</button>
+      <button id="next-btn" onclick="nextQuestion()">Next</button>
+      <button id="submit-btn" onclick="submitQuiz()" style="display: none;">Submit Quiz</button>
       <div id="result"></div>
       <button id="reveal-btn" onclick="revealVoiceNote()">Tap to Reveal</button>
       <audio id="voice-note" controls>
@@ -70,84 +67,54 @@
 
     <script>
       const questions = [
-        {
-          q: "How often do you have dreams about me?",
-          options: ["rarely", "sometimes", "a lot"],
-          answer: 2,
-        },
-        {
-          q: "When did we first text?",
-          options: ["November", "October", "December"],
-          answer: 0,
-        },
-        {
-          q: "What’s my favorite nickname for you?",
-          options: ["Princess", "Tiamisu", "Azzy"],
-          answer: 0,
-        },
-        {
-          q: "What’s my favorite thing about you?",
-          options: ["Your smile", "Your eyes", "Your heart"],
-          answer: 2,
-        },
-        {
-          q: "What's my favourite snack?",
-          options: ["Tiramisu", "cake", "You"],
-          answer: 2,
-        },
-        {
-          q: "Which pet would we get together?",
-          options: ["Dog", "Cat", "Bunny"],
-          answer: 1,
-        },
-        {
-          q: "What’s my dream date with you after marriage?",
-          options: ["Beach picnic", "Movie night, just us", "Dinner"],
-          answer: 1,
-        },
-        {
-          q: "What’s my favourite azzy dream?",
-          options: ["hu tao one", "sofa teasing one", "mirror dream"],
-          answer: 0,
-        },
-        {
-          q: "How much do I love you?",
-          options: ["A little", "A lot", "Infinity"],
-          answer: 2,
-        },
-        {
-          q: "Do you want to spend all your next birthdays with me?",
-          options: ["yes", "yes", "yes"],
-          answer: 0,
-        },
+        { q: "How often do you have dreams about me?", options: ["rarely", "sometimes", "a lot"], answer: 2 },
+        { q: "When did we first text?", options: ["November", "October", "December"], answer: 0 },
+        { q: "What’s my favorite nickname for you?", options: ["Princess", "Tiamisu", "Azzy"], answer: 0 },
+        { q: "What’s my favorite thing about you?", options: ["Your smile", "Your eyes", "Your heart"], answer: 2 },
+        { q: "What's my favourite snack?", options: ["Tiramisu", "cake", "You"], answer: 2 },
+        { q: "Which pet would we get together?", options: ["Dog", "Cat", "Bunny"], answer: 1 },
+        { q: "What’s my dream date with you after marriage?", options: ["Beach picnic", "Movie night, just us", "Dinner"], answer: 1 },
+        { q: "What’s my favourite azzy dream?", options: ["hu tao one", "sofa teasing one", "mirror dream"], answer: 0 },
+        { q: "How much do I love you?", options: ["A little", "A lot", "Infinity"], answer: 2 },
+        { q: "Do you want to spend all your next birthdays with me?", options: ["yes", "yes", "yes"], answer: 0 }
       ];
 
+      let currentQuestionIndex = 0;
       const quizContainer = document.getElementById("quiz");
-      questions.forEach((q, index) => {
-        const div = document.createElement("div");
-        div.innerHTML = `<div class='question'>${index + 1}. ${q.q}</div>`;
-        const ul = document.createElement("ul");
-        ul.classList.add("options");
-        q.options.forEach((opt, i) => {
-          ul.innerHTML += `<li><input type='radio' name='q${index}' value='${i}'> ${opt}</li>`;
-        });
-        div.appendChild(ul);
-        quizContainer.appendChild(div);
-      });
+      const nextButton = document.getElementById("next-btn");
+      const submitButton = document.getElementById("submit-btn");
+
+      function showQuestion(index) {
+        const q = questions[index];
+        quizContainer.innerHTML = `
+          <div class='question'>${index + 1}. ${q.q}</div>
+          <ul class='options'>
+            ${q.options.map((opt, i) => `<li><input type='radio' name='q${index}' value='${i}'> ${opt}</li>`).join("")}
+          </ul>
+        `;
+      }
+
+      function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          showQuestion(currentQuestionIndex);
+        }
+        if (currentQuestionIndex === questions.length - 1) {
+          nextButton.style.display = "none";
+          submitButton.style.display = "block";
+        }
+      }
 
       function submitQuiz() {
         let score = 0;
         questions.forEach((q, index) => {
-          const selected = document.querySelector(
-            `input[name='q${index}']:checked`
-          );
+          const selected = document.querySelector(`input[name='q${index}']:checked`);
           if (selected && parseInt(selected.value) === q.answer) {
             score++;
           }
         });
-        document.getElementById(
-          "result"
-        ).innerHTML = `You scored ${score}/10! 🎉`;
+        document.getElementById("result").innerHTML = `You scored ${score}/10! 🎉`;
+        document.getElementById("result").style.display = "block";
         document.getElementById("reveal-btn").style.display = "block";
       }
 
@@ -156,8 +123,7 @@
         document.getElementById("reveal-btn").style.display = "none";
       }
 
-      // Always show the reveal button after quiz submission
-      document.getElementById("reveal-btn").style.display = "block";
+      showQuestion(currentQuestionIndex);
     </script>
   </body>
 </html>
